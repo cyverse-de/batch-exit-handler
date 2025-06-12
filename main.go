@@ -81,6 +81,9 @@ func uploadFiles(outputFolder string) error {
 		outputFolder,
 	)
 	cmd.Env = os.Environ()
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
 	return cmd.Run()
 }
 
@@ -142,21 +145,25 @@ func main() {
 	}
 
 	// Send the uploading files status
+	log.Println("sending uploading files status: running")
 	if err = sendStatus(statusURL, jobUUID, "uploading files", "running"); err != nil {
 		log.Printf("%s\n", err)
 	}
 
 	// upload files
+	log.Printf("uploading files to %s\n", outputFolder)
 	if err = uploadFiles(outputFolder); err != nil {
 		log.Printf("%s\n", err)
 	}
 
 	// send finished status
+	log.Printf("sending final status: %s\n", workflowStatus)
 	if err = sendStatus(statusURL, jobUUID, "sending final status", workflowStatus); err != nil {
 		log.Printf("%s\n", err)
 	}
 
 	// send clean up message
+	log.Printf("sending cleanup message for job %s\n", jobUUID)
 	if err = sendCleanupMessage(cleanupURL, jobUUID); err != nil {
 		log.Printf("%s\n", err)
 	}
