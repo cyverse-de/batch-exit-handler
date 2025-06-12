@@ -154,6 +154,8 @@ func main() {
 	log.Printf("uploading files to %s\n", outputFolder)
 	if err = uploadFiles(outputFolder); err != nil {
 		log.Printf("%s\n", err)
+
+		workflowStatus = "failed"
 	}
 
 	// send finished status
