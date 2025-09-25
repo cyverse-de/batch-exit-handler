@@ -11,6 +11,6 @@ RUN go build --buildvcs=false .
 # Create the deployable container image
 FROM debian:stable-slim
 WORKDIR /app
-COPY --from=gocmd /opt/conda/bin/gocmd /bin/gocmd
+COPY --from=gocmd /usr/bin/gocmd /bin/gocmd
 COPY --from=golang /go/src/github.com/cyverse-de/batch-exit-handler/batch-exit-handler /bin/batch-exit-handler
 ENTRYPOINT ["batch-exit-handler"]
